@@ -7,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class Start
 {
-	private Start() {}
-
 	public static void Start(Controller ctrl, @NotNull String name)
 	{
 		try
