@@ -15,12 +15,16 @@ import java.net.URISyntaxException;
 
 public class Launch extends JPanel implements ActionListener, ChangeListener
 {
-	private Controller ctrl;
-	private Image      imgFond;
-	private Image      imgHead;
-	private JButton    btnDisconnect;
-	private JButton    btnPlay;
-	private JSpinner   ramSelector;
+	private Controller   ctrl;
+	private Image        imgFond;
+	private Image        imgHead;
+	private JButton      btnDisconnect;
+	private JButton      btnPlay;
+	private JSpinner     ramSelector;
+	private JProgressBar progressBar;
+
+	private JPanel       panelTop;
+	private JPanel       panelBot;
 
 	public Launch( Controller ctrl )
 	{
@@ -34,6 +38,10 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		this.btnDisconnect = new JButton("Déconnexion");
 		this.btnPlay       = new JButton("Jouer");
 		this.ramSelector   = new JSpinner(ramModel);
+		this.progressBar   = new JProgressBar(0, 10000);
+
+		this.progressBar.setStringPainted(true);
+		this.progressBar.setValue(0);
 
 		this.btnPlay      .addActionListener( this );
 		this.btnDisconnect.addActionListener( this );
@@ -44,19 +52,19 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		String ramValue = ctrl.getSaver().get("ram");
 		if (ramValue != null && ramValue.matches("\\d+")) this.ramSelector.setValue( Integer.parseInt(ramValue) );
 
-		JPanel panelTop = new JPanel();
-		JPanel panelBot = new JPanel();
+		this.panelTop = new JPanel();
+		this.panelBot = new JPanel();
 
-		panelTop.setOpaque( false );
-		panelBot.setOpaque( false );
+		this.panelTop.setOpaque( false );
+		this.panelBot.setOpaque( false );
 
-		panelTop.add( this.btnDisconnect );
-		panelTop.add( this.btnPlay       );
+		this.panelTop.add( this.btnDisconnect );
+		this.panelTop.add( this.btnPlay       );
 
-		panelBot.add(this.ramSelector);
+		this.panelBot.add(this.ramSelector);
 
-		this.add( panelTop, BorderLayout.NORTH );
-		this.add( panelBot, BorderLayout.SOUTH );
+		this.add( this.panelTop, BorderLayout.NORTH );
+		this.add( this.panelBot, BorderLayout.SOUTH );
 	}
 
 	@Override
@@ -69,14 +77,16 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		if (this.imgHead != null) g.drawImage ( this.imgHead, 50, 200, this );
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		if ( e.getSource() == this.btnPlay )
 		{
 			this.ctrl.getLogger().info("Préparation !");
-			Setup.setup( this.ctrl);
+
+			new Thread(() -> {
+				Setup.setup( this.ctrl, this );
+			}).start();
 		}
 		else
 		{
@@ -86,6 +96,30 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 			this.ctrl.switchLogin();
 		}
+	}
+
+	public void setInLoading( boolean in )
+	{
+		this.panelBot.removeAll();
+
+		if (in)
+		{
+			this.panelBot.add(this.ramSelector);
+			this.panelBot.add(this.progressBar);
+		}
+		else
+		{
+			this.panelBot.add(this.ramSelector);
+			this.progressBar.setValue(0);
+		}
+
+		this.repaint();
+		this.revalidate();
+	}
+
+	public void setLoadingProgress( int progress )
+	{
+		this.progressBar.setValue( progress );
 	}
 
 	public void refreshHeadImg()

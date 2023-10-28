@@ -11,14 +11,15 @@ import fr.flowarg.flowupdater.versions.ForgeVersionBuilder;
 import fr.flowarg.flowupdater.versions.ForgeVersionType;
 import fr.flowarg.flowupdater.versions.VanillaVersion;
 import fr.glauncher.Controller;
+import fr.glauncher.ui.panels.Launch;
 
 import java.nio.file.Path;
 
 public class Setup
 {
-	public static void setup(Controller ctrl)
+	public static void setup(Controller ctrl, Launch launch)
 	{
-		IProgressCallback callback = makeCallback( ctrl );
+		IProgressCallback callback = makeCallback( ctrl, launch );
 
 		try
 		{
@@ -56,20 +57,26 @@ public class Setup
 		}
 	}
 
-	public static IProgressCallback makeCallback( Controller ctrl )
+	public static IProgressCallback makeCallback(Controller ctrl, Launch launch)
 	{
 		return new IProgressCallback()
 		{
 			@Override
 			public void step(Step step)
 			{
-				if (step.name().equals("END")) ctrl.hide();
+				launch.setInLoading( true );
+
+				if (step.name().equals("END"))
+				{
+					launch.setInLoading( false );
+					ctrl.hide();
+				}
 			}
 
 			@Override
 			public void update(DownloadList.DownloadInfo info)
 			{
-				// ctrl.getLogger().info(String.format("%,10d / %,10d", info.getDownloadedBytes(), info.getTotalToDownloadBytes()));
+				launch.setLoadingProgress( (int) (10000.0 * info.getDownloadedBytes() / info.getTotalToDownloadBytes()) );
 			}
 
 			@Override

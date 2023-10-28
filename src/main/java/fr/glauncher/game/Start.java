@@ -21,8 +21,6 @@ public class Start
 
 			noFramework.getAdditionalVmArgs().add( String.format("-Xmx%sM", ramValue) );
 
-			ctrl.getLogger().info(String.format("-Xmx%sM", ramValue));
-
 			Process p = noFramework.launch(
 					name,
 					Controller.pack.getVersion().split("-")[1],
