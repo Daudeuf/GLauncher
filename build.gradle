@@ -1,0 +1,49 @@
+plugins {
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java-library'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+apply plugin: 'org.openjfx.javafxplugin'
+
+group = 'fr.glauncher'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://litarvan.github.io/maven'
+    }
+}
+
+dependencies {
+    implementation 'fr.litarvan:openauth:1.1.6'
+
+    implementation 'fr.flowarg:flowupdater:1.8.1'     // make game file & DL mods
+    implementation 'fr.flowarg:openlauncherlib:3.2.6' // launch downloaded files
+    implementation 'fr.flowarg:flowmultitools:1.4.0'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.web', 'javafx.swing' ]
+}
+
+application {
+    mainClassName = 'fr.glauncher.Main'
+}
+
+compileJava {
+    options.encoding = "UTF-8"
+}
+
+java {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    // sourceCompatibility = JavaVersion.VERSION_16 // Spécifiez la version source souhaitée, par exemple 1.8 pour Java 8
+    // targetCompatibility = JavaVersion.VERSION_16 // Spécifiez la version cible souhaitée, par exemple 1.8 pour Java 8
+}
