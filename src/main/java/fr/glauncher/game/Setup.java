@@ -22,6 +22,8 @@ public class Setup
 
 		try
 		{
+			Controller.pack.refresh();
+
 			final VanillaVersion vanillaVersion = new VanillaVersion.VanillaVersionBuilder()
 					.withName(Controller.pack.getVersion().split("-")[0])
 					.build();

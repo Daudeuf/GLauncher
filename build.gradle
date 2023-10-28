@@ -44,6 +44,4 @@ compileJava {
 java {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-    // sourceCompatibility = JavaVersion.VERSION_16 // Spécifiez la version source souhaitée, par exemple 1.8 pour Java 8
-    // targetCompatibility = JavaVersion.VERSION_16 // Spécifiez la version cible souhaitée, par exemple 1.8 pour Java 8
 }

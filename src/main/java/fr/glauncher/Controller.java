@@ -28,7 +28,6 @@ public class Controller
 
 	private static final String  NAME  = "glauncher";
 	private static final String  LABEL = "GLauncher";
-	public static final  String  RAM   = "-Xmx4096M";
 
 	private ILogger  logger;
 	private Path     launcherDir;

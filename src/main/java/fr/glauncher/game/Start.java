@@ -19,7 +19,11 @@ public class Start
 					GameFolder.FLOW_UPDATER
 			);
 
-			noFramework.getAdditionalVmArgs().add(Controller.RAM);
+			int ramValue = Integer.parseInt(ctrl.getSaver().get("ram"));
+
+			noFramework.getAdditionalVmArgs().add( String.format("-Xmx%sM", ramValue) );
+
+			ctrl.getLogger().info(String.format("-Xmx%sM", ramValue));
 
 			Process p = noFramework.launch(
 					name,
