@@ -20,7 +20,7 @@ public class Controller
 
 	static {
 		try {
-			pack = PackInfos.create("http://92.222.181.21/modpack_info.json");
+			pack = PackInfos.create("https://raw.githubusercontent.com/Daudeuf/GLauncher/master/modpack_info.json");
 		} catch (URISyntaxException | IOException e) {
 			throw new RuntimeException(e);
 		}
