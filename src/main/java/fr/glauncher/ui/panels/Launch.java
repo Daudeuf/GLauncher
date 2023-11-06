@@ -106,11 +106,17 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		{
 			this.panelBot.add(this.ramSelector);
 			this.panelBot.add(this.progressBar);
+
+			this.btnPlay      .setEnabled( false );
+			this.btnDisconnect.setEnabled( false );
 		}
 		else
 		{
 			this.panelBot.add(this.ramSelector);
 			this.progressBar.setValue(0);
+
+			this.btnPlay      .setEnabled( true );
+			this.btnDisconnect.setEnabled( true );
 		}
 
 		this.repaint();

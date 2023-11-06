@@ -17,7 +17,9 @@ public class Start
 					GameFolder.FLOW_UPDATER
 			);
 
-			int ramValue = Integer.parseInt(ctrl.getSaver().get("ram"));
+			String ramString = ctrl.getSaver().get("ram");
+
+			int    ramValue  = Integer.parseInt(ramString == null ? "4096" : ramString);
 
 			noFramework.getAdditionalVmArgs().add( String.format("-Xmx%sM", ramValue) );
 
