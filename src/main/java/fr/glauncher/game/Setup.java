@@ -13,7 +13,12 @@ import fr.flowarg.flowupdater.versions.VanillaVersion;
 import fr.glauncher.Controller;
 import fr.glauncher.ui.panels.Launch;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class Setup
 {
@@ -47,6 +52,30 @@ public class Setup
 					.build();
 
 			updater.update(ctrl.getLauncherDir());
+
+			// Fix shaders
+			File modsFolder = new File(ctrl.getLauncherDir().toFile(), "mods");
+			File shadersFolder = new File(ctrl.getLauncherDir().toFile(), "shaderpacks");
+
+			if (!shadersFolder.exists()) shadersFolder.mkdirs();
+
+			if (
+					modsFolder.exists() &&
+					modsFolder.isDirectory() &&
+					shadersFolder.exists() &&
+					shadersFolder.isDirectory()
+			) {
+				File[] shaders = modsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".zip"));
+
+				assert shaders != null;
+				for (File shader : shaders) {
+					try {
+						Files.copy(shader.toPath(), new File(shadersFolder, shader.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+					} catch (IOException exp) {
+						ctrl.getLogger().printStackTrace(exp);
+					}
+				}
+			}
 
 			ctrl.getLogger().info("Lancement !");
 			Start.Start(ctrl, updater.getVanillaVersion().getName());
