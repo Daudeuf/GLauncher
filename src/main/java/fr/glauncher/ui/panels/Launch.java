@@ -1,14 +1,17 @@
 package fr.glauncher.ui.panels;
 
+import com.sun.management.OperatingSystemMXBean;
 import fr.glauncher.Controller;
 import fr.glauncher.game.Setup;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,6 +25,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 	private JButton      btnPlay;
 	private JSpinner     ramSelector;
 	private JProgressBar progressBar;
+	private JLabel       lblRamInfo;
 
 	private JPanel       panelTop;
 	private JPanel       panelBot;
@@ -35,10 +39,13 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 		SpinnerModel ramModel = new SpinnerNumberModel(4096, 1024, 16384, 256);
 
+		long memorySize = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize();
+
 		this.btnDisconnect = new JButton("Déconnexion");
 		this.btnPlay       = new JButton("Jouer");
 		this.ramSelector   = new JSpinner(ramModel);
 		this.progressBar   = new JProgressBar(0, 10000);
+		this.lblRamInfo    = new JLabel(String.format(" Mémoire RAM disponible : %,d Mo ", memorySize / 1_000_000));
 
 		this.progressBar.setStringPainted(true);
 		this.progressBar.setValue(0);
@@ -48,6 +55,12 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 		this.ramSelector.setEditor(new JSpinner.NumberEditor(this.ramSelector, "# Mo"));
 		this.ramSelector.addChangeListener(this);
+
+		Border border = BorderFactory.createLineBorder(Color.darkGray, 2);
+
+		this.lblRamInfo.setBorder(border);
+		this.lblRamInfo.setBackground( Color.lightGray );
+		this.lblRamInfo.setOpaque(true);
 
 		String ramValue = ctrl.getSaver().get("ram");
 		if (ramValue != null && ramValue.matches("\\d+")) this.ramSelector.setValue( Integer.parseInt(ramValue) );
@@ -62,6 +75,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		this.panelTop.add( this.btnPlay       );
 
 		this.panelBot.add(this.ramSelector);
+		this.panelBot.add(this.lblRamInfo);
 
 		this.add( this.panelTop, BorderLayout.NORTH );
 		this.add( this.panelBot, BorderLayout.SOUTH );
@@ -104,7 +118,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 		if (in)
 		{
-			this.panelBot.add(this.ramSelector);
+			//this.panelBot.add(this.ramSelector);
 			this.panelBot.add(this.progressBar);
 
 			this.btnPlay      .setEnabled( false );
@@ -113,6 +127,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		else
 		{
 			this.panelBot.add(this.ramSelector);
+			this.panelBot.add(this.lblRamInfo);
 			this.progressBar.setValue(0);
 
 			this.btnPlay      .setEnabled( true );
