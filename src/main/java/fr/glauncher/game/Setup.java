@@ -34,6 +34,9 @@ public class Setup
 					.withName(Controller.pack.getVersion().split("-")[0])
 					.build();
 
+			String modsString = ctrl.getSaver().get("additional_mod_list", "");
+			String[] mods     = modsString.split("\n");
+
 			final AbstractForgeVersion forge = new ForgeVersionBuilder(ForgeVersionType.NEW)
 					.withForgeVersion(Controller.pack.getVersion())
 					.withCurseModPack(new CurseModPackInfo(
@@ -41,7 +44,7 @@ public class Setup
 							Controller.pack.getFileId(),
 							true)
 					)
-					.withFileDeleter(new ModFileDeleter(true))
+					.withFileDeleter(new ModFileDeleter(true, mods))
 					.build();
 
 			final FlowUpdater updater = new FlowUpdater.FlowUpdaterBuilder()

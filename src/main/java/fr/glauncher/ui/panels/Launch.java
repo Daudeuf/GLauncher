@@ -3,6 +3,7 @@ package fr.glauncher.ui.panels;
 import com.sun.management.OperatingSystemMXBean;
 import fr.glauncher.Controller;
 import fr.glauncher.game.Setup;
+import fr.glauncher.ui.frames.AdditionalModList;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -23,6 +24,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 	private Image        imgHead;
 	private JButton      btnDisconnect;
 	private JButton      btnPlay;
+	private JButton      btnAdditional;
 	private JSpinner     ramSelector;
 	private JProgressBar progressBar;
 	private JLabel       lblRamInfo;
@@ -43,6 +45,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 		this.btnDisconnect = new JButton("Déconnexion");
 		this.btnPlay       = new JButton("Jouer");
+		this.btnAdditional = new JButton("Mods supplémentaires");
 		this.ramSelector   = new JSpinner(ramModel);
 		this.progressBar   = new JProgressBar(0, 10000);
 		this.lblRamInfo    = new JLabel(String.format(" Mémoire RAM disponible : %,d Mo ", memorySize / 1_000_000));
@@ -52,6 +55,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 		this.btnPlay      .addActionListener( this );
 		this.btnDisconnect.addActionListener( this );
+		this.btnAdditional.addActionListener( this );
 
 		this.ramSelector.setEditor(new JSpinner.NumberEditor(this.ramSelector, "# Mo"));
 		this.ramSelector.addChangeListener(this);
@@ -71,6 +75,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		this.panelTop.setOpaque( false );
 		this.panelBot.setOpaque( false );
 
+		this.panelTop.add( this.btnAdditional );
 		this.panelTop.add( this.btnDisconnect );
 		this.panelTop.add( this.btnPlay       );
 
@@ -102,7 +107,11 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 				Setup.setup( this.ctrl, this );
 			}).start();
 		}
-		else
+		else if ( e.getSource() == this.btnAdditional )
+		{
+			new AdditionalModList( this.ctrl );
+		}
+		else if ( e.getSource() == this.btnDisconnect )
 		{
 			this.ctrl.getSaver().remove("msAccessToken");
 			this.ctrl.getSaver().remove("msRefreshToken");
@@ -122,6 +131,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 			this.panelBot.add(this.progressBar);
 
 			this.btnPlay      .setEnabled( false );
+			this.btnAdditional.setEnabled( false );
 			this.btnDisconnect.setEnabled( false );
 		}
 		else
@@ -131,6 +141,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 			this.progressBar.setValue(0);
 
 			this.btnPlay      .setEnabled( true );
+			this.btnAdditional.setEnabled( true );
 			this.btnDisconnect.setEnabled( true );
 		}
 
