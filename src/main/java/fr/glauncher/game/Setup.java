@@ -14,7 +14,6 @@ import fr.glauncher.Controller;
 import fr.glauncher.ui.panels.Launch;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
