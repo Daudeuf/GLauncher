@@ -48,7 +48,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		this.btnAdditional = new JButton("Mods supplémentaires");
 		this.ramSelector   = new JSpinner(ramModel);
 		this.progressBar   = new JProgressBar(0, 10000);
-		this.lblRamInfo    = new JLabel(String.format(" Mémoire RAM disponible : %,d Mo ", memorySize / 1_000_000));
+		this.lblRamInfo    = new JLabel(String.format(" Mémoire RAM disponible : %,d Mo ", memorySize / ( 1_024 * 1_024 )));
 
 		this.progressBar.setStringPainted(true);
 		this.progressBar.setValue(0);
