@@ -55,7 +55,7 @@ public class Setup
 
 			updater.update(ctrl.getLauncherDir());
 
-			// Fix shaders
+			// Fix Shaders
 			File modsFolder = new File(ctrl.getLauncherDir().toFile(), "mods");
 			File shadersFolder = new File(ctrl.getLauncherDir().toFile(), "shaderpacks");
 
@@ -78,6 +78,7 @@ public class Setup
 					}
 				}
 			}
+			// End Fixing Shaders
 
 			ctrl.getLogger().info("Lancement !");
 			Start.Start(ctrl, updater.getVanillaVersion().getName());
