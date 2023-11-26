@@ -19,18 +19,16 @@ import java.net.URISyntaxException;
 
 public class Launch extends JPanel implements ActionListener, ChangeListener
 {
-	private Controller   ctrl;
-	private Image        imgFond;
-	private Image        imgHead;
-	private JButton      btnDisconnect;
-	private JButton      btnPlay;
-	private JButton      btnAdditional;
-	private JSpinner     ramSelector;
-	private JProgressBar progressBar;
-	private JLabel       lblRamInfo;
-
-	private JPanel       panelTop;
-	private JPanel       panelBot;
+	private final Controller   ctrl;
+	private final JButton      btnDisconnect;
+	private final JButton      btnPlay;
+	private final JButton      btnAdditional;
+	private final JSpinner     ramSelector;
+	private final JProgressBar progressBar;
+	private final JLabel       lblRamInfo;
+	private final JPanel       panelBot;
+	private final Image        imgFond;
+	private Image              imgHead;
 
 	public Launch( Controller ctrl )
 	{
@@ -69,20 +67,20 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		String ramValue = ctrl.getSaver().get("ram");
 		if (ramValue != null && ramValue.matches("\\d+")) this.ramSelector.setValue( Integer.parseInt(ramValue) );
 
-		this.panelTop = new JPanel();
+		JPanel panelTop = new JPanel();
 		this.panelBot = new JPanel();
 
-		this.panelTop.setOpaque( false );
+		panelTop.setOpaque( false );
 		this.panelBot.setOpaque( false );
 
-		this.panelTop.add( this.btnAdditional );
-		this.panelTop.add( this.btnDisconnect );
-		this.panelTop.add( this.btnPlay       );
+		panelTop.add( this.btnAdditional );
+		panelTop.add( this.btnDisconnect );
+		panelTop.add( this.btnPlay       );
 
 		this.panelBot.add(this.ramSelector);
 		this.panelBot.add(this.lblRamInfo);
 
-		this.add( this.panelTop, BorderLayout.NORTH );
+		this.add(panelTop, BorderLayout.NORTH );
 		this.add( this.panelBot, BorderLayout.SOUTH );
 	}
 
@@ -101,11 +99,9 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 	{
 		if ( e.getSource() == this.btnPlay )
 		{
-			this.ctrl.getLogger().info("Préparation !");
+			this.ctrl.getLogger().info("Preparing launch !");
 
-			new Thread(() -> {
-				Setup.setup( this.ctrl, this );
-			}).start();
+			new Thread(() ->  Setup.setup( this.ctrl, this ) ).start();
 		}
 		else if ( e.getSource() == this.btnAdditional )
 		{

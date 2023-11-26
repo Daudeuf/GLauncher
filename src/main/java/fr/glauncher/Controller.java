@@ -29,11 +29,11 @@ public class Controller
 	private static final String  NAME  = "glauncher";
 	private static final String  LABEL = "GLauncher";
 
-	private ILogger  logger;
-	private Path     launcherDir;
-	private Launcher launcher;
-	private Saver    saver;
-	private Auth     auth;
+	private final ILogger  logger;
+	private final Path     launcherDir;
+	private final Launcher launcher;
+	private final Saver    saver;
+	private final Auth     auth;
 
 	public Controller()
 	{

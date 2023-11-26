@@ -16,7 +16,6 @@ import fr.glauncher.ui.panels.Launch;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 public class Setup
@@ -56,7 +55,7 @@ public class Setup
 			updater.update(ctrl.getLauncherDir());
 
 			// Fix Shaders
-			File modsFolder = new File(ctrl.getLauncherDir().toFile(), "mods");
+			File modsFolder    = new File(ctrl.getLauncherDir().toFile(), "mods"       );
 			File shadersFolder = new File(ctrl.getLauncherDir().toFile(), "shaderpacks");
 
 			if (!shadersFolder.exists()) shadersFolder.mkdirs();
@@ -80,8 +79,8 @@ public class Setup
 			}
 			// End Fixing Shaders
 
-			ctrl.getLogger().info("Lancement !");
-			Start.Start(ctrl, updater.getVanillaVersion().getName());
+			ctrl.getLogger().info("Launching !");
+			new Start(ctrl, updater.getVanillaVersion().getName());
 		}
 		catch (Exception exp)
 		{
@@ -109,12 +108,6 @@ public class Setup
 			public void update(DownloadList.DownloadInfo info)
 			{
 				launch.setLoadingProgress( (int) (10000.0 * info.getDownloadedBytes() / info.getTotalToDownloadBytes()) );
-			}
-
-			@Override
-			public void onFileDownloaded(Path path)
-			{
-				// ctrl.getLogger().info(path.toString());
 			}
 		};
 	}

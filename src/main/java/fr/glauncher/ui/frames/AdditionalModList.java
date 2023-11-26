@@ -9,15 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AdditionalModList extends JFrame implements ActionListener {
-	private JButton    btn;
-	private JTextArea  txtArea;
-	private Controller ctrl;
+	private final JTextArea  txtArea;
+	private final Controller ctrl;
 
 	public AdditionalModList(Controller ctrl)
 	{
 		this.ctrl = ctrl;
 
-		this.setTitle("Test");
+		this.setTitle("Mods supplémentaires");
 		this.setLocationRelativeTo(null);
 		this.setSize(450, 350);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -25,14 +24,14 @@ public class AdditionalModList extends JFrame implements ActionListener {
 		JPanel p = new JPanel( new BorderLayout(20, 20) );
 
 		this.txtArea = new JTextArea();
-		this.btn     = new JButton("Valider");
-		this.btn.addActionListener(this);
+		JButton btn = new JButton("Valider");
+		btn.addActionListener(this);
 
 		Saver s = this.ctrl.getSaver();
 
 		this.txtArea.setText( s.get("additional_mod_list", "") );
 
-		p.add( this.btn,     BorderLayout.SOUTH  );
+		p.add(btn,     BorderLayout.SOUTH  );
 		p.add( this.txtArea, BorderLayout.CENTER );
 
 		this.add(p);

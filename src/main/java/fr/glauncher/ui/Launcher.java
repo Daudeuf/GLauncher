@@ -9,15 +9,13 @@ import java.awt.*;
 
 public class Launcher extends JFrame
 {
-	private Controller ctrl;
-	private JPanel     panelSwitch;
-	private JPanel     panelLaunch;
-	private JPanel     panelLogin;
-	private CardLayout crdLyt;
+	private final JPanel     panelSwitch;
+	private final JPanel     panelLaunch;
+	private final JPanel     panelLogin;
+	private final CardLayout crdLyt;
 
 	public Launcher(Controller ctrl)
 	{
-		this.ctrl = ctrl;
 
 		Image     icon       = getToolkit().getImage( getClass().getResource("/icon.png") );
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,8 +32,8 @@ public class Launcher extends JFrame
 
 		this.crdLyt      = new CardLayout();
 		this.panelSwitch = new JPanel ( this.crdLyt );
-		this.panelLaunch = new Launch ( this.ctrl   );
-		this.panelLogin  = new Login  ( this.ctrl   );
+		this.panelLaunch = new Launch (ctrl);
+		this.panelLogin  = new Login  (ctrl);
 
 		this.panelSwitch.add( this.panelLogin,  "Login"  );
 		this.panelSwitch.add( this.panelLaunch, "Launch" );

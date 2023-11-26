@@ -9,42 +9,42 @@ import java.awt.event.ActionListener;
 
 public class Login extends JPanel implements ActionListener
 {
-	private JCheckBox      cb;
-	private JLabel         lblUsername;
-	private JLabel         lblMail;
-	private JLabel         lblPassword;
-	private JPasswordField txtPassword;
-	private JTextField     txtMail;
-	private JTextField     txtUsername;
-	private JButton        btnValider;
-	private Image          imgFond;
+	private final JCheckBox      cb;
+	private final JLabel         lblUsername;
+	private final JLabel         lblMail;
+	private final JLabel         lblPassword;
+	private final JPasswordField txtPassword;
+	private final JTextField     txtMail;
+	private final JTextField     txtUsername;
+	private final JButton        btnValid;
+	private final Image          imgFond;
 
-	private JPanel         panelMid;
-	private JPanel         panelBot;
+	private final JPanel         panelMid;
+	private final JPanel         panelBot;
 
-	private Controller     ctrl;
+	private final Controller     ctrl;
 
 	public Login( Controller ctrl )
 	{
 		this.imgFond     = getToolkit().getImage ( getClass().getResource("/background.png") );
 		this.ctrl        = ctrl;
 
-		this.cb          = new JCheckBox("Mode Hors Ligne", false);
+		this.cb          = new JCheckBox("Mode Hors-Ligne", false);
 		this.lblUsername = new JLabel("Nom d'Utilisateur");
 		this.lblMail     = new JLabel("Adresse Mail");
 		this.lblPassword = new JLabel("Mot De Passe");
 		this.txtUsername = new JTextField(24);
 		this.txtMail     = new JTextField(48);
 		this.txtPassword = new JPasswordField(24);
-		this.btnValider  = new JButton("Connexion");
+		this.btnValid    = new JButton("Connexion");
 
 		this.panelMid    = new JPanel();
 		this.panelBot    = new JPanel();
 
 		this.setLayout( new BorderLayout() );
 
-		this.btnValider.addActionListener( this );
-		this.cb        .addActionListener( this );
+		this.btnValid.addActionListener( this );
+		this.cb      .addActionListener( this );
 
 		this.cb      .setOpaque( false );
 		this.panelMid.setOpaque( false );
@@ -60,7 +60,7 @@ public class Login extends JPanel implements ActionListener
 		this.panelMid.add(this.lblPassword);
 		this.panelMid.add(this.txtPassword);
 
-		this.panelBot.add(this.btnValider);
+		this.panelBot.add(this.btnValid);
 	}
 
 	@Override
@@ -80,14 +80,14 @@ public class Login extends JPanel implements ActionListener
 			this.panelBot.removeAll();
 			// this.removeAll();
 
-			this.ctrl.getLogger().info(this.cb.isSelected() ? "switch : hors ligne" : "switch :   en ligne");
+			this.ctrl.getLogger().info(this.cb.isSelected() ? "Account Type : Offline" : "Account Type : Online");
 
 			if ( this.cb.isSelected() )
 			{
 				this.txtUsername.setText( ctrl.getSaver().get("offline-username") != null ? ctrl.getSaver().get("offline-username") : "" );
 
 				this.panelBot.add( this.cb         );
-				this.panelBot.add( this.btnValider );
+				this.panelBot.add( this.btnValid   );
 
 				this.panelMid.add(this.lblUsername );
 				this.panelMid.add(this.txtUsername );
@@ -98,7 +98,7 @@ public class Login extends JPanel implements ActionListener
 				this.txtMail    .setText("");
 
 				this.panelBot.add( this.cb         );
-				this.panelBot.add( this.btnValider );
+				this.panelBot.add( this.btnValid   );
 
 				this.panelMid.add(this.lblMail     );
 				this.panelMid.add(this.txtMail     );
@@ -109,7 +109,7 @@ public class Login extends JPanel implements ActionListener
 			this.repaint();
 			this.revalidate();
 		}
-		else if (e.getSource() == this.btnValider) // btn connexion
+		else if (e.getSource() == this.btnValid)
 		{
 			String username = this.txtUsername.getText();
 			String mail     = this.txtMail    .getText();
@@ -131,13 +131,13 @@ public class Login extends JPanel implements ActionListener
 
 		if ( this.ctrl.getAuth().isAuth( false ) )
 		{
-			this.ctrl.getLogger().info("Connexion [ Mode : Hors Ligne] !");
+			this.ctrl.getLogger().info("Connection [ Account Type : Offline ] !");
 			this.ctrl.getLogger().info(this.ctrl.getAuth().getAuthInfos().getUsername());
 			this.ctrl.switchLogin();
 		}
 		else
 		{
-			this.ctrl.getLogger().err("Echec de la connexion [ Mode : En Ligne] !");
+			this.ctrl.getLogger().err("Connection Error [ Account Type : Online ] !");
 		}
 	}
 
@@ -147,7 +147,7 @@ public class Login extends JPanel implements ActionListener
 
 		if ( this.ctrl.getAuth().isAuth( true ) )
 		{
-			this.ctrl.getLogger().info("Connexion [ Mode : En Ligne] !");
+			this.ctrl.getLogger().info("Connection [ Account Type : Online ] !");
 			this.ctrl.getLogger().info(this.ctrl.getAuth().getAuthInfos().getUsername());
 			this.ctrl.switchLogin();
 
@@ -156,21 +156,21 @@ public class Login extends JPanel implements ActionListener
 		}
 		else
 		{
-			this.ctrl.getLogger().err("Echec de la connexion [ Mode : En Ligne] !");
+			this.ctrl.getLogger().err("Connection Error [ Account Type : Online ] !");
 		}
 	}
 
 	public void checkOnline()
 	{
 		// lock
-		this.btnValider .setEnabled( false );
+		this.btnValid.setEnabled( false );
 		this.txtMail    .setEnabled( false );
 		this.txtPassword.setEnabled( false );
 		this.txtUsername.setEnabled( false );
 
 		if ( this.ctrl.getAuth().isAuth( true ) )
 		{
-			this.ctrl.getLogger().info("Connexion (Auto) [ Mode : En Ligne] !");
+			this.ctrl.getLogger().info("Automatic Connection [ Account Type : Online !");
 			this.ctrl.getLogger().info(this.ctrl.getAuth().getAuthInfos().getUsername());
 			this.ctrl.switchLogin();
 
@@ -179,7 +179,7 @@ public class Login extends JPanel implements ActionListener
 		}
 
 		// unlock
-		this.btnValider .setEnabled( true );
+		this.btnValid   .setEnabled( true );
 		this.txtMail    .setEnabled( true );
 		this.txtPassword.setEnabled( true );
 		this.txtUsername.setEnabled( true );

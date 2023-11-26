@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class Auth
 {
-	private Controller ctrl;
+	private final Controller ctrl;
 	private AuthInfos  auth;
 
 	public Auth( Controller ctrl )
@@ -81,7 +81,7 @@ public class Auth
 
 			MicrosoftAuthResult authRes = authenticator.loginWithCredentials(mail, pswrd.toString());
 
-			this.ctrl.getSaver().set("msAccessToken", authRes.getAccessToken());
+			this.ctrl.getSaver().set("msAccessToken",  authRes.getAccessToken() );
 			this.ctrl.getSaver().set("msRefreshToken", authRes.getRefreshToken());
 			this.ctrl.getSaver().save();
 
@@ -94,7 +94,7 @@ public class Auth
 			);
 
 			this.ctrl.refreshHeadImg();
-			this.ctrl.getLogger().info("Hello " + authRes.getProfile().getName());
+			this.ctrl.getLogger().info("User: " + authRes.getProfile().getName());
 		}
 		catch (MicrosoftAuthenticationException e)
 		{
