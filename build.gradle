@@ -21,9 +21,8 @@ repositories {
 dependencies {
     implementation 'fr.litarvan:openauth:1.1.6'
 
-    implementation 'fr.flowarg:flowupdater:1.8.3'     // make game file & DL mods
+    implementation 'fr.flowarg:flowupdater:1.8.5'     // make game file & DL mods
     implementation 'fr.flowarg:openlauncherlib:3.2.6' // launch downloaded files
-    implementation 'fr.flowarg:flowmultitools:1.4.0'
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
 }
