@@ -8,7 +8,7 @@ plugins {
 
 apply plugin: 'org.openjfx.javafxplugin'
 
-group = 'fr.glauncher'
+group = 'fr.diamodaria'
 version = '1.0'
 
 repositories {
@@ -33,7 +33,7 @@ javafx {
 }
 
 application {
-    mainClassName = 'fr.glauncher.Main'
+    mainClassName = 'fr.diamodaria.Main'
 }
 
 compileJava {
