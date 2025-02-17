@@ -12,10 +12,15 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class Launch extends JPanel implements ActionListener, ChangeListener
 {
@@ -23,6 +28,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 	private final JButton      btnDisconnect;
 	private final JButton      btnPlay;
 	private final JButton      btnAdditional;
+	private final JButton      btnImport;
 	private final JSpinner     ramSelector;
 	private final JProgressBar progressBar;
 	private final JLabel       lblRamInfo;
@@ -44,6 +50,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		this.btnDisconnect = new JButton("Déconnexion");
 		this.btnPlay       = new JButton("Jouer");
 		this.btnAdditional = new JButton("Mods supplémentaires");
+		this.btnImport     = new JButton("Importer un profile");
 		this.ramSelector   = new JSpinner(ramModel);
 		this.progressBar   = new JProgressBar(0, 10000);
 		this.lblRamInfo    = new JLabel(String.format(" Mémoire RAM disponible : %,d Mo ", memorySize / ( 1_024 * 1_024 )));
@@ -54,6 +61,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		this.btnPlay      .addActionListener( this );
 		this.btnDisconnect.addActionListener( this );
 		this.btnAdditional.addActionListener( this );
+		this.btnImport    .addActionListener( this );
 
 		this.ramSelector.setEditor(new JSpinner.NumberEditor(this.ramSelector, "# Mo"));
 		this.ramSelector.addChangeListener(this);
@@ -76,6 +84,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 		panelTop.add( this.btnAdditional );
 		panelTop.add( this.btnDisconnect );
 		panelTop.add( this.btnPlay       );
+		panelTop.add( this.btnImport );
 
 		this.panelBot.add(this.ramSelector);
 		this.panelBot.add(this.lblRamInfo);
@@ -115,6 +124,45 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 
 			this.ctrl.switchLogin();
 		}
+		else if ( e.getSource() == this.btnImport )
+		{
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fileChooser.setDialogTitle("Sélectionner un dossier d'instance curseforge");
+
+			String userHome = System.getProperty("user.home");
+			File defaultFolder = new File(userHome, "curseforge\\minecraft\\Instances");
+
+			if (defaultFolder.exists() && defaultFolder.isDirectory()) {
+				fileChooser.setCurrentDirectory(defaultFolder);
+			}
+
+			int result = fileChooser.showOpenDialog(null);
+
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File selectedFolder = fileChooser.getSelectedFile();
+				Path destinationFolder = this.ctrl.getLauncherDir();
+				String[] filesToTransfer = {"servers.dat", "options.txt", "journeymap/", "schematics/", "saves/"};
+
+
+				for (String item : filesToTransfer) {
+					File sourceFile = new File(selectedFolder, item);
+					Path destinationPath = destinationFolder.resolve(item);
+
+					try {
+						if (sourceFile.exists()) {
+							if (sourceFile.isFile()) {
+								Files.copy(sourceFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+							} else if (sourceFile.isDirectory()) {
+								copyDirectory(sourceFile.toPath(), destinationPath);
+							}
+						}
+					} catch (IOException ee) {
+						ee.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	public void setInLoading( boolean in )
@@ -127,6 +175,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 			this.panelBot.add(this.progressBar);
 
 			this.btnPlay      .setEnabled( false );
+			this.btnImport    .setEnabled( false );
 			this.btnAdditional.setEnabled( false );
 			this.btnDisconnect.setEnabled( false );
 		}
@@ -137,6 +186,7 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 			this.progressBar.setValue(0);
 
 			this.btnPlay      .setEnabled( true );
+			this.btnImport    .setEnabled( true );
 			this.btnAdditional.setEnabled( true );
 			this.btnDisconnect.setEnabled( true );
 		}
@@ -176,5 +226,20 @@ public class Launch extends JPanel implements ActionListener, ChangeListener
 			this.ctrl.getSaver().set("ram", String.valueOf(value));
 			this.ctrl.getSaver().save();
 		}
+	}
+
+	private static void copyDirectory(Path sourceDir, Path destinationDir) throws IOException {
+		Files.walk(sourceDir).forEach(sourcePath -> {
+			try {
+				Path targetPath = destinationDir.resolve(sourceDir.relativize(sourcePath));
+				if (Files.isDirectory(sourcePath)) {
+					Files.createDirectories(targetPath);
+				} else {
+					Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 }
