@@ -20,7 +20,7 @@ public class Controller
 
 	static {
 		try {
-			pack = PackInfos.create("http://82.29.170.61/modpack_info.json");
+			pack = PackInfos.create("http://145.223.34.52/modpack_info.json");
 		} catch (URISyntaxException | IOException e) {
 			throw new RuntimeException(e);
 		}
