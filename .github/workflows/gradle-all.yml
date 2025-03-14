@@ -10,7 +10,7 @@ name: All Package
 on:
   push:
     branches:
-      - main
+      - diamodaria
 
 jobs:
   gradle:
