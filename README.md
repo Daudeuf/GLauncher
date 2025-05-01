@@ -1,3 +1,6 @@
+# New versioon here
+https://github.com/Daudeuf/NewLauncher
+
 # GLauncher for The G Pack
 
 GLauncher is a custom launcher designed to streamline the launch of "The G Pack" modpack for Minecraft. It provides a user-friendly way to launch the game and access a unique gaming experience.
