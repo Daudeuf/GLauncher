@@ -1,4 +1,4 @@
-# New versioon here
+# New version here
 https://github.com/Daudeuf/NewLauncher
 
 # GLauncher for The G Pack
